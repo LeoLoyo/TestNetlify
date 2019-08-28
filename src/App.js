@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Rates from './Rates'
 
-const valor_presente = 1960000
-const interes = 0.019
-const numero_cuotas = 12
 
-const interes_x_numero_cuotas = Math.pow(1 + interes, numero_cuotas)
-const valor_cuota = valor_presente * ( (interes * interes_x_numero_cuotas)/ (interes_x_numero_cuotas - 1) )
+
 
 class App extends Component {
+  async componentDidMount(){
+    // const rates = await Rates()
+    // console.log("TCL: App -> componentDidMount -> rates", rates)
+    const data = await fetch("https://localbitcoins.com/buy-bitcoins-online/CO/colombia/.json").then(data => data.json())
+    console.log("TCL: App -> componentDidMount -> data", data)
+  }
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Hi, Edit <code>{valor_cuota}</code> and save to reload.
+            Hi, Edit and save to reload.
           </p>
           <a
             className="App-link"
