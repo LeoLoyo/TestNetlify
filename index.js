@@ -44,5 +44,5 @@ async function searchRates () {
         console.log(`${country.name}  Tasa: ${tasa}`)
     })
 }
-searchRates()
-setInterval(searchRates, (process.env.TIMEE || 1)*60*1000)
+// searchRates()
+// setInterval(searchRates, (process.env.TIMEE || 1)*60*1000)
