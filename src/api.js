@@ -4,6 +4,7 @@ const serverless = require("serverless-http");
 
 const app = express();
 const router = express.Router();
+router.get("/", async(req, res) => { res.json({message: 'hola leo'})})
 router.get("/tasa/:country/:min", async(req, res) => {
       try {
         const { country, min } = req.params
