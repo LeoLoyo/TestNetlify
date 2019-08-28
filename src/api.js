@@ -32,7 +32,8 @@ router.get("/tasa/:country/:min", async(req, res) => {
     }
 });
 
-app.use(`/api`, router);
+// app.use(`/api`, router);
+app.use(`/.netlify/functions/api`, router);
 
 
 
