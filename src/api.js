@@ -5,9 +5,9 @@ const serverless = require("serverless-http");
 const app = express();
 const router = express.Router();
 router.get("/", async(req, res) => { res.json({message: 'hola leo'})})
-router.get("/tasa/:country/:min", async(req, res) => {
+router.get("/tasa/:country/:min/:rate", async(req, res) => {
       try {
-        const { country, min } = req.params
+        const { country, min, rate } = req.params
         const _bestPriceSell = await bestPriceSell(min_amount_ve)
         const countries = [
             { name: 'colombia', currency: 'CO', min: 50000, operation: true },
@@ -24,7 +24,9 @@ router.get("/tasa/:country/:min", async(req, res) => {
         const tasas = await searchRates([conuntrySelected], _bestPriceSell)
         return res.json({ fecha: new Date()
           , precio_venta_venezuela: _bestPriceSell.temp_price,
-           tasas 
+           tasas,
+           ganacia: `${((1- ((conuntrySelected.operation ? Number(tasas[0].tasa) / Number(rate) :Number(rate) / Number(tasas[0].tasa) ))) * 100).toFixed(2)}%`
+
         })
     } catch (error) {
         console.log("TCL: error", error)
@@ -47,13 +49,15 @@ const makeRequest = async (url) => {
 
 async function bestPriceBuy(amount, country) {
     const { ad_list } = await makeRequest(`https://localbitcoins.com/buy-bitcoins-online/${country.currency}/${country.name}/.json`)
-    const { data } = ad_list.filter(({ data }) => Number(data.min_amount) >= amount)[0]
+    const { data } = ad_list.filter(({ data }) => Number(data.min_amount) >= amount)[1]
+    console.log("TCL: bestPriceBuy -> data", data.profile.username)
     return data
 }
 async function bestPriceSell(amount) {
     const { ad_list } = await makeRequest("https://localbitcoins.com/sell-bitcoins-online/VE/venezuela/.json")
-    const { data = {} } = ad_list.filter(({ data }) => Number(data.min_amount) >= amount)[0] || {}
+    const { data = {} } = ad_list.filter(({ data }) => Number(data.min_amount) >= amount)[1] || {}
     return data
+    console.log("TCL: bestPriceSell -> data", data)
 }
 
 
